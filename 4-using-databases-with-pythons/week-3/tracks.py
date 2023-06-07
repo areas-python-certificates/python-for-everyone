@@ -3,7 +3,7 @@ import xml.etree.ElementTree as et
 import sqlite3
 
 # Get the file.
-filename = input("Enter file name: ")
+filename = input("Enter the filename: ")
 if len(filename) == 0: filename = "Library.xml"
 
 # Parse the XML.
@@ -79,25 +79,25 @@ for track in tracks:
 	genreId = cursor.fetchone()[0]
 
 	# Insert the artist.
-	cursor.execute(
-		'''INSERT OR IGNORE INTO Artist (name)
-		   VALUES ( ? )''', ( trackArtist, )
+	cursor.execute('''
+		INSERT OR IGNORE INTO Artist (name)
+		VALUES ( ? )''', ( trackArtist, )
 	)
 	cursor.execute( 'SELECT id FROM Artist WHERE name = ? ', ( trackArtist, ) )
 	artistId = cursor.fetchone()[0]
 
 	# Insert the album.
-	cursor.execute(
-		'''INSERT OR IGNORE INTO Album (title, artist_id)
-		   VALUES ( ?, ? )''', ( trackAlbum, artistId )
+	cursor.execute('''
+		INSERT OR IGNORE INTO Album (title, artist_id)
+		VALUES ( ?, ? )''', ( trackAlbum, artistId )
 	)
 	cursor.execute( 'SELECT id FROM Album WHERE title = ? ', (trackAlbum,) )
 	albumId = cursor.fetchone()[0]
 
 	# Insert the track.
-	cursor.execute(
-		'''INSERT OR REPLACE INTO Track ( title, album_id, genre_id )
-		   VALUES ( ?, ?, ? )''', ( trackName, albumId, genreId )
+	cursor.execute('''
+		INSERT OR REPLACE INTO Track ( title, album_id, genre_id )
+		VALUES ( ?, ?, ? )''', ( trackName, albumId, genreId )
 	)
 
 	connect.commit()
